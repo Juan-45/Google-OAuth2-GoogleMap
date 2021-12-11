@@ -7,10 +7,7 @@ function App() {
     googleAuth: "",
   });
   const [isUserLogged, setIsUserLogged] = useState(false);
-  const [currentUser, setCurrentUser] = useState({
-    user: "",
-    hasGrantedScopes: false,
-  });
+  const [currentUser, setCurrentUser] = useState({});
 
   const CLIENT_KEY = process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID;
   const API_KEY = process.env.REACT_APP_GOOGLE_DRIVE_API_KEY;
@@ -25,13 +22,7 @@ function App() {
       //It will wait for the promises of both requests
       const getCurrentUser = async () => {
         const user = await googleAuth.currentUser.get();
-        const hasGrantedScopes = await googleAuth.currentUser
-          .get()
-          .hasGrantedScopes(SCOPES);
-        return {
-          user,
-          hasGrantedScopes,
-        };
+        return user;
       };
 
       if (isSignedIn) {
@@ -103,8 +94,15 @@ function App() {
   };
 
   const makeRequest = () => {
+    console.log("Permissions", currentUser.hasGrantedScopes(SCOPES));
     if (isUserLogged) {
-      console.log("The request can be made");
+      if (currentUser.hasGrantedScopes(SCOPES)) {
+        console.log("The request can be made");
+        console.log(currentUser);
+      } else {
+        console.log("More permissions are needed");
+        currentUser.grant({ scope: SCOPES });
+      }
     } else signIn();
   };
 
@@ -153,7 +151,7 @@ function App() {
         }}
       >
         {isUserLogged ? (
-          <p className="text">{`Usuario actual: ${currentUser.user.Au.jf}`}</p>
+          <p className="text">{`Usuario actual: ${currentUser.Au.jf}`}</p>
         ) : null}
       </div>
     </div>
