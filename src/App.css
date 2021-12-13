@@ -20,3 +20,12 @@
 .text {
   color: #242424;
 }
+
+.container {
+  display: flex;
+  justify-content: center;
+  height: 30%;
+  background-color: #bdd3ffa3;
+  margin-bottom: 100px;
+  padding: 50px;
+}
