@@ -38,14 +38,16 @@ function App() {
         }}
       />
 
-      <Map
-        manageMap={{
-          apiKey: process.env.REACT_APP_GOOGLE_DRIVE_API_KEY,
-          markersCoordinates,
-          center: { lat: -33.91721, lng: 151.2263 },
-          zoom: 15,
-        }}
-      />
+      {isUserLogged ? (
+        <Map
+          manageMap={{
+            apiKey: process.env.REACT_APP_GOOGLE_DRIVE_API_KEY,
+            markersCoordinates,
+            center: { lat: -33.91721, lng: 151.2263 },
+            zoom: 15,
+          }}
+        />
+      ) : null}
     </div>
   );
 }
