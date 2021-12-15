@@ -1,8 +1,7 @@
 import "App.css";
 import Authentication from "Authentication";
 import useOAuth2 from "hooks/useOAuth2";
-import { Wrapper } from "@googlemaps/react-wrapper";
-import Map from "Map";
+import Map from "MapContainer";
 
 function App() {
   const {
@@ -20,6 +19,13 @@ function App() {
       "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
   });
 
+  const markersCoordinates = [
+    { lat: -33.91721, lng: 151.2263 },
+    { lat: -33.91539, lng: 151.2282 },
+    { lat: -33.91747, lng: 151.22912 },
+    { lat: -33.91727341958453, lng: 151.23348314155578 },
+  ];
+
   return (
     <div className="App">
       <Authentication
@@ -32,9 +38,14 @@ function App() {
         }}
       />
 
-      <Wrapper apiKey={process.env.REACT_APP_GOOGLE_DRIVE_API_KEY}>
-        <Map center={{ lat: -33.91721, lng: 151.2263 }} zoom={15} />
-      </Wrapper>
+      <Map
+        manageMap={{
+          apiKey: process.env.REACT_APP_GOOGLE_DRIVE_API_KEY,
+          markersCoordinates,
+          center: { lat: -33.91721, lng: 151.2263 },
+          zoom: 15,
+        }}
+      />
     </div>
   );
 }
