@@ -43,7 +43,7 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
         })
         .then(() => {
           googleAuth = window.gapi.auth2.getAuthInstance();
-          setGoogleAuth(googleAuth);
+          googleAuth.then((res) => setGoogleAuth(res));
 
           //Check if there is some user logged.
           updateSignInStatus(googleAuth.isSignedIn.get());
