@@ -3,29 +3,29 @@ import { useEffect, useState, useCallback } from "react";
 const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
   const [googleAuth, setGoogleAuth] = useState({});
   const [isUserLogged, setIsUserLogged] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
+  const [googleUser, setGoogleUser] = useState({});
 
   const initClient = useCallback(() => {
     let googleAuth;
 
     const updateSignInStatus = (isSignedIn) => {
       //It dosen't have a then method, so I specified that it is an asyncrhonous function
-      const getCurrentUser = async () => {
+      const getGoogleUser = async () => {
         try {
-          const user = googleAuth.currentUser.get();
+          const user = googleAuth.googleUser.get();
           return user;
         } catch (e) {
-          console.log("Error on Getting CurrentUser", e);
+          console.log("Error on Getting GoogleUser", e);
         }
       };
 
       const updateStateOnSuccess = (res) => {
-        setCurrentUser(res);
+        setGoogleUser(res);
         setIsUserLogged(true);
       };
 
       if (isSignedIn) {
-        getCurrentUser().then((res) => {
+        getGoogleUser().then((res) => {
           updateStateOnSuccess(res);
         });
       } else {
@@ -86,13 +86,13 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
   const manageRequest = (makeRequest) => {
     const grantAccessTo = async (scope) => {
       try {
-        await currentUser.grant({ scope });
+        await googleUser.grant({ scope });
       } catch (e) {
         console.log(e);
       }
     };
     if (isUserLogged) {
-      if (currentUser.hasGrantedScopes(SCOPES)) {
+      if (googleUser.hasGrantedScopes(SCOPES)) {
         makeRequest(window.gapi.client);
       } else {
         grantAccessTo(SCOPES);
@@ -100,7 +100,7 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
     } else signIn();
   };
 
-  console.log("Current User Logged", currentUser);
+  console.log("Current User Logged", googleUser);
   console.log("Is user logged", isUserLogged);
 
   useEffect(() => {
@@ -118,7 +118,7 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
     revokeAccess,
     manageRequest,
     googleAuth,
-    currentUser,
+    googleUser,
     isUserLogged,
   };
 };

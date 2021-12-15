@@ -1,13 +1,13 @@
 import "App.css";
 
-const Authentication = ({ manageAuth }) => {
+const Authentication = ({ authSettings }) => {
   const {
     handleAuthButton,
     isUserLogged,
     revokeAccess,
     manageRequest,
-    currentUser,
-  } = manageAuth;
+    //googleUser,
+  } = authSettings;
 
   return (
     <>
@@ -24,7 +24,7 @@ const Authentication = ({ manageAuth }) => {
       </div>
       <div className="container">
         {isUserLogged ? (
-          <p className="text">{`Usuario actual: ${currentUser.Au.jf}`}</p>
+          <p className="text">{/*`Usuario actual: ${googleUser.Au.jf}`*/}</p>
         ) : null}
       </div>
     </>
