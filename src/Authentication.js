@@ -1,22 +1,14 @@
-import useOAuth2 from "authentication/useOAuth2";
 import "App.css";
 
-const Authentication = () => {
+const Authentication = ({ manageAuth }) => {
   const {
-    manageRequest,
     handleAuthButton,
-    revokeAccess,
     isUserLogged,
+    revokeAccess,
+    manageRequest,
     currentUser,
-  } = useOAuth2({
-    CLIENT_KEY: process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID,
-    API_KEY: process.env.REACT_APP_GOOGLE_DRIVE_API_KEY,
-    SCOPES:
-      "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.readonly",
-    DISCOVERY_DOCS:
-      "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-  });
-  console.log(isUserLogged);
+  } = manageAuth;
+
   return (
     <>
       <div className="container">
