@@ -93,8 +93,7 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
     };
     if (isUserLogged) {
       if (currentUser.hasGrantedScopes(SCOPES)) {
-        makeRequest();
-        console.log(currentUser);
+        makeRequest(window.gapi.client);
       } else {
         grantAccessTo(SCOPES);
       }
