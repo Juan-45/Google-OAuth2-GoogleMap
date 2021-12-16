@@ -6,7 +6,7 @@ const Authentication = ({ authSettings }) => {
     isUserLogged,
     revokeAccess,
     manageRequest,
-    //googleUser,
+    basicProfile,
   } = authSettings;
 
   return (
@@ -24,7 +24,7 @@ const Authentication = ({ authSettings }) => {
       </div>
       <div className="container">
         {isUserLogged ? (
-          <p className="text">{/*`Usuario actual: ${googleUser.Au.jf}`*/}</p>
+          <p className="text">{`Usuario actual: ${basicProfile.getName()}`}</p>
         ) : null}
       </div>
     </>
