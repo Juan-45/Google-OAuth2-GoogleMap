@@ -1,7 +1,7 @@
 import useGoogleMaps from "hooks/useGoogleMaps";
 
-const Map = ({ manageMap }) => {
-  const { ref } = useGoogleMaps({ manageMap });
+const Map = ({ mapSettings }) => {
+  const { ref } = useGoogleMaps({ mapSettings });
 
   return (
     <div id="mapContainer">
