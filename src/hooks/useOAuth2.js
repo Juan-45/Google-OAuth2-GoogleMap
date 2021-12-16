@@ -4,30 +4,42 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
   const [googleAuth, setGoogleAuth] = useState({});
   const [isUserLogged, setIsUserLogged] = useState(false);
   const [googleUser, setGoogleUser] = useState({});
+  const [basicProfile, setBasicProfile] = useState();
 
   const initClient = useCallback(() => {
-    let googleAuth;
+    let auth;
 
     const updateSignInStatus = (isSignedIn) => {
       //It dosen't have a then method, so I specified that it is an asyncrhonous function
       const getGoogleUser = async () => {
         try {
-          const user = googleAuth.googleUser.get();
+          const user = auth.currentUser.get();
           return user;
         } catch (e) {
           console.log("Error on Getting GoogleUser", e);
         }
       };
+      const getBasicProfile = async (userInst) => {
+        try {
+          const basicProfile = userInst.getBasicProfile();
+          return basicProfile;
+        } catch (e) {
+          console.log("Error on Getting BasicProfile", e);
+        }
+      };
 
-      const updateStateOnSuccess = (res) => {
-        setGoogleUser(res);
-        setIsUserLogged(true);
+      const updateStateAsync = () => {
+        getGoogleUser().then((res) => {
+          setGoogleUser(res);
+          getBasicProfile(res).then((response) => {
+            setBasicProfile(response);
+            setIsUserLogged(true);
+          });
+        });
       };
 
       if (isSignedIn) {
-        getGoogleUser().then((res) => {
-          updateStateOnSuccess(res);
-        });
+        updateStateAsync();
       } else {
         setIsUserLogged(false);
       }
@@ -42,13 +54,13 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
           discoveryDocs: [DISCOVERY_DOCS],
         })
         .then(() => {
-          googleAuth = window.gapi.auth2.getAuthInstance();
-          googleAuth.then((res) => setGoogleAuth(res));
+          auth = window.gapi.auth2.getAuthInstance();
+          auth.then((res) => setGoogleAuth(res));
 
           //Check if there is some user logged.
-          updateSignInStatus(googleAuth.isSignedIn.get());
+          updateSignInStatus(auth.isSignedIn.get());
           // Add listener for sign-in state changes.
-          googleAuth.isSignedIn.listen(updateSignInStatus);
+          auth.isSignedIn.listen(updateSignInStatus);
         });
     } catch (e) {
       console.log("Error on Initializing Client", e);
@@ -102,7 +114,7 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
 
   console.log("Current User Logged", googleUser);
   console.log("Is user logged", isUserLogged);
-
+  console.log("Basic Profile", basicProfile);
   useEffect(() => {
     const handleClientLoad = () => {
       window.gapi.load("client:auth2", initClient);
@@ -112,13 +124,13 @@ const useOAuth2 = ({ CLIENT_KEY, API_KEY, SCOPES, DISCOVERY_DOCS }) => {
     script.src = "https://apis.google.com/js/api.js";
     document.body.appendChild(script);
   }, [initClient]);
-
   return {
     handleAuthButton,
     revokeAccess,
     manageRequest,
     googleAuth,
     googleUser,
+    basicProfile,
     isUserLogged,
   };
 };
