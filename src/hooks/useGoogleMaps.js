@@ -1,9 +1,11 @@
 import { useRef, useEffect, useState } from "react";
 
-const useGoogleMaps = ({ mapSettings }) => {
+const useGoogleMaps = ({ ...mapSettings }) => {
   //The infoWindowHtml parameter should be html code as a string
-  const { markersSettings, iconURL, infoWindowHtml, center, zoom } =
+  const { markersSettings, iconSetting, infoWindowSettings, center, zoom } =
     mapSettings;
+
+  const { infoWindowHtml, addHandlers } = infoWindowSettings;
   const [mapInstance, setMapInstance] = useState();
   const ref = useRef();
 
@@ -28,28 +30,29 @@ const useGoogleMaps = ({ mapSettings }) => {
       const icons = {
         blueBubble: iconBaseURL + "blue-dot.png",
       };
-
       const markerConfig = markersSettings.map((item) => ({
         position: item.position,
-        icon: iconURL ? iconURL : icons.blueBubble,
+        icon: iconSetting ? iconSetting : icons.blueBubble,
         map: mapInstance,
       }));
+
+      const infoWindow = new window.google.maps.InfoWindow();
 
       for (let i = 0; i < markerConfig.length; i++) {
         const marker = new window.google.maps.Marker(markerConfig[i]);
 
         if (infoWindowHtml) {
-          const infoWindowContent = new window.google.maps.InfoWindow({
-            content: infoWindowHtml[i],
+          marker.addListener("click", () => {
+            infoWindow.setContent(infoWindowHtml[i]);
+            infoWindow.open(mapInstance, marker);
+            infoWindow.addListener("domready", () => {
+              addHandlers();
+            });
           });
-
-          window.google.maps.event.addListener(marker, "click", () =>
-            infoWindowContent.open(mapInstance, marker)
-          );
         }
       }
     }
-  }, [mapInstance, iconURL, markersSettings, infoWindowHtml]);
+  }, [mapInstance, iconSetting, markersSettings, infoWindowHtml, addHandlers]);
 
   return {
     mapInstance,
