@@ -11,15 +11,21 @@ const useGoogleMaps = (mapSettings) => {
     withStreetView,
     withInfoWindow,
   } = mapSettings;
-
+  const streetViewDefaultSetting = useMemo(
+    () => ({
+      shouldDisplay: false,
+      position: {},
+      pov: {},
+      zoom: 1,
+      visible: true,
+    }),
+    []
+  );
   const [mapInstance, setMapInstance] = useState();
   const [panorameInstance, setPanorameInstance] = useState();
-  const [streetViewSettings, setStreetViewSettings] = useState({
-    shouldDisplay: false,
-    position: {},
-    pov: {},
-    zoom: 1,
-  });
+  const [streetViewSettings, setStreetViewSettings] = useState(
+    streetViewDefaultSetting
+  );
   const ref = useRef();
 
   const infoWindowHtml = useMemo(() => {
@@ -151,23 +157,26 @@ const useGoogleMaps = (mapSettings) => {
       }
     };
     const { shouldDisplay, ...streetViewPanoramaOptions } = streetViewSettings;
-    if (mapInstance && withStreetView && shouldDisplay && !panorameInstance) {
+    if (shouldDisplay && !panorameInstance) {
       initialize().then((res) => {
         setPanorameInstance(res);
-        res.setVisible(false);
+        res.addListener("closeclick", () => {
+          setStreetViewSettings(streetViewDefaultSetting);
+        });
       });
     }
 
     if (shouldDisplay && panorameInstance) {
-      panorameInstance.setVisible(true);
-      panorameInstance.addListener("closeclick", () => {
-        setStreetViewSettings({ shouldDisplay: false, position: {} });
-        panorameInstance.setVisible(false);
-      });
       panorameInstance.setOptions(streetViewPanoramaOptions);
+      panorameInstance.setVisible(true);
     }
-  }, [mapInstance, streetViewSettings, withStreetView, panorameInstance]);
-
+  }, [
+    mapInstance,
+    streetViewSettings,
+    withStreetView,
+    panorameInstance,
+    streetViewDefaultSetting,
+  ]);
   return {
     mapInstance,
     panorameInstance,
