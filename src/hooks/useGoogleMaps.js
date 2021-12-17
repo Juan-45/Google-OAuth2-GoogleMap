@@ -51,32 +51,45 @@ const useGoogleMaps = (mapSettings) => {
     return htmlString;
   }, [withGps, withStreetView, locationSettings]);
 
-  const gpsButtonHanlder = useCallback(() => console.log("GPS clicked"), []);
+  const gpsButtonHanlder = useCallback(
+    (positionObj) => {
+      const { lng, lat } = positionObj;
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+      window.open(url, "_blank");
+    },
 
-  const streetButtonHandler = useCallback((currentMarker) => {
-    const getPosition = currentMarker.getPosition();
-    setStreetViewSettings({
-      shouldDisplay: true,
-      position: {
-        lng: getPosition.lng(),
-        lat: getPosition.lat(),
-      },
-      pov: currentMarker.pov,
-      zoom: currentMarker.zoom,
-    });
+    []
+  );
+
+  const streetButtonHandler = useCallback((panoramaSettingsObj) => {
+    setStreetViewSettings(panoramaSettingsObj);
   }, []);
 
   const addHandlers = useCallback(
     (currentMarker) => {
+      const getPosition = currentMarker.getPosition();
+      const currentPosition = {
+        lng: getPosition.lng(),
+        lat: getPosition.lat(),
+      };
+      const panoramaSettings = {
+        shouldDisplay: true,
+        position: currentPosition,
+        pov: currentMarker.pov,
+        zoom: currentMarker.zoom,
+      };
+
       if (withGps) {
         document
           .getElementById("gpsButton")
-          .addEventListener("click", gpsButtonHanlder);
+          .addEventListener("click", () => gpsButtonHanlder(currentPosition));
       }
       if (withStreetView) {
         document
           .getElementById("streetButton")
-          .addEventListener("click", () => streetButtonHandler(currentMarker));
+          .addEventListener("click", () =>
+            streetButtonHandler(panoramaSettings)
+          );
       }
     },
     [gpsButtonHanlder, streetButtonHandler, withGps, withStreetView]
