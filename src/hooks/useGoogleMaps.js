@@ -89,7 +89,7 @@ const useGoogleMaps = (mapSettings) => {
       }
     };
 
-    if (ref.current && !mapInstance && !streetViewSettings.shouldDisplay) {
+    if (!mapInstance && !streetViewSettings.shouldDisplay) {
       initialiceMap().then((map) => {
         setMapInstance(map);
       });
@@ -97,7 +97,7 @@ const useGoogleMaps = (mapSettings) => {
   }, [center, zoom, mapInstance, streetViewSettings]);
 
   useEffect(() => {
-    if (ref.current && mapInstance && locationSettings) {
+    if (mapInstance && locationSettings) {
       const iconBaseURL = "http://maps.google.com/mapfiles/ms/icons/";
 
       const icons = {
@@ -151,13 +151,7 @@ const useGoogleMaps = (mapSettings) => {
       }
     };
     const { shouldDisplay, ...streetViewPanoramaOptions } = streetViewSettings;
-    if (
-      ref.current &&
-      mapInstance &&
-      withStreetView &&
-      shouldDisplay &&
-      !panorameInstance
-    ) {
+    if (mapInstance && withStreetView && shouldDisplay && !panorameInstance) {
       initialize().then((res) => {
         setPanorameInstance(res);
         res.setVisible(false);
