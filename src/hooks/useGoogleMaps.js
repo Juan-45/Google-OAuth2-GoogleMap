@@ -51,15 +51,11 @@ const useGoogleMaps = (mapSettings) => {
     return htmlString;
   }, [withGps, withStreetView, locationSettings]);
 
-  const gpsButtonHanlder = useCallback(
-    (positionObj) => {
-      const { lng, lat } = positionObj;
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-      window.open(url, "_blank");
-    },
-
-    []
-  );
+  const gpsButtonHanlder = useCallback((positionObj) => {
+    const { lng, lat } = positionObj;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(url, "_blank");
+  }, []);
 
   const streetButtonHandler = useCallback((panoramaSettingsObj) => {
     setStreetViewSettings(panoramaSettingsObj);
