@@ -1,8 +1,8 @@
 import { Wrapper } from "@googlemaps/react-wrapper";
 import Map from "mapContainer/Map";
 
-const MapContainer = ({ mapSettings }) => {
-  const { apiKey } = mapSettings;
+const MapContainer = ({ mapInitialSettings }) => {
+  const { apiKey, ...mapSettings } = mapInitialSettings;
 
   return (
     <Wrapper apiKey={apiKey}>

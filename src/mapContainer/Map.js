@@ -1,14 +1,7 @@
 import useGoogleMaps from "hooks/useGoogleMaps";
-import ManageInfoWindowHTML from "./map/ManageInfoWindowHTML";
 
 const Map = ({ mapSettings }) => {
-  const { markersSettings } = mapSettings;
-
-  const infoWindowSettings = ManageInfoWindowHTML({
-    markersSettings,
-  });
-
-  const { ref } = useGoogleMaps({ ...mapSettings, infoWindowSettings });
+  const { ref } = useGoogleMaps(mapSettings);
 
   return (
     <div id="mapContainer">
