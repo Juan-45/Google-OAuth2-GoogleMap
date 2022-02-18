@@ -1,4 +1,5 @@
 import useGoogleMaps from "hooks/useGoogleMaps";
+import "Map.css";
 
 const Map = ({ mapSettings }) => {
   const { ref } = useGoogleMaps(mapSettings);
