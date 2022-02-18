@@ -20,6 +20,7 @@ As the main things at least, the hook will initialice a googleAuth instance and 
 ### Google Maps
 
 We need to install the React Wrapper library in order to be able to work with the "useGoogleMaps" hook, the library will provide a Wrapper component which will initialice a googleMap instance, it needs a API_Key for doing so.
+*Add: "@googlemaps/react-wrapper": "^1.1.17", to package.JSON's dependencies and run npm install*
 
 The hook can initialice a simple map, add markers to it, make them clickeable to show infoWindow. Also can initialice streetView, just remember to pass the returned ref by the hook to the DOM element where the map or panorama (StreetView) will be embedded.
 
