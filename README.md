@@ -9,7 +9,7 @@ The *useOAuth2* hook recieves the following arguments:
 - SCOPE: Scopes enable your application to only request access to the resources that it needs while also enabling users to control the amount of access that they            grant to your application. 
 - DISCOVERY_DOCS: Each API's Discovery Document describes the surface of the API.
 
-As the main things at least, the hook will initialice a googleAuth instance and will return a handler for LogIn/LogOut and another for revoking access. 
+As the main things at least, **the hook will initialice a googleAuth instance** and will return a handler for LogIn/LogOut and another for revoking access. 
 
 #### Remember
 
@@ -23,6 +23,16 @@ We need to install the React Wrapper library in order to be able to work with th
 *Add: "@googlemaps/react-wrapper": "^1.1.17", to package.JSON's dependencies and run npm install*
 
 The hook can initialice a simple map, add markers to it, make them clickeable to show infoWindow. Also can initialice streetView, just remember to pass the returned ref by the hook to the DOM element where the map or panorama (StreetView) will be embedded.
+
+### Main Files
+
+For using this features in other projects extract the following files:
+
+  - MapContainer.js
+  - Map.js
+  - Map.css
+  - useGoogleMaps.js
+  - useOAuth2.js
 
 ### References
 - [Google Doc to set up OAuth 2.0 with gapi](https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow)
